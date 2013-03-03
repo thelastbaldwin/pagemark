@@ -1,0 +1,17 @@
+body{
+	background-color: #eee;
+	height: auto;
+	font: 12px/14px Helvetica;
+}
+
+ul{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	width: 200px;
+	height: auto;
+}
+
+li:hover{
+	background-color: red;
+}
