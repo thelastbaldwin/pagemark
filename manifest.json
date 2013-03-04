@@ -4,8 +4,15 @@
 	"browser_action": {     
 		"default_icon": "icon.png",
 		"default_title": "PageMark",
-		"default_popup": "popup.html",
-		"background_page": "background.html"},
-	"permissions" : ["storage"],
-	"manifest_version": 2 
+		"default_popup": "popup.html"
+	},
+	"content_scripts" :[
+		{
+			"matches" : ["http://*/*"],
+			"js" : ["scripts/jquery.1.9.1.min.js","scripts/contentscript.js"]
+		}
+	],
+	"permissions" : ["storage", "tabs", "http://*/*"],
+	"manifest_version": 2,
+	"offline_enabled": true
 } 
