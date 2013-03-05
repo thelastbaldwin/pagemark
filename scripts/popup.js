@@ -1,5 +1,9 @@
-// sanity check
-// alert("here");
+//store the page info like this for lookup and 
+//saving reasons
+var pageInfo = {
+	currentPosition: 0,
+	url: ''
+}
 
 var currentPosition,
 	url;
@@ -29,16 +33,16 @@ function getPageInfo(){
 
 function sendPagePosition(){
 	chrome.tabs.getSelected(null, function(tab) {
-	  chrome.tabs.sendMessage(tab.id, {type: "getInfo"}, function(response) {
-	    currentPosition = response.pageYOffset;
-	    url = response.url;
-	    console.log("response received in popup.js", url, currentPosition);
-	  });
+	  chrome.tabs.sendMessage(tab.id, {type: "setPosition", x: 0, y : 50});
 	});
 }
 
-function getSavedData(){
+function getSavedPositon(pageInfo){
+	return chrome.storage.local.pagefinder[pageInfo.url] | undefined;
+}
 
+function savePageInfo(pageInfo){
+	chrome.storage.local.pageFinder[pageInfo.url] = pageInfo.currentPosition;
 }
 
 var goto = document.getElementById("goto");
@@ -47,6 +51,9 @@ goto.onclick = function(){
 	//page info. chrome.tabs.getSelected puts us in the current tab
 	
 	getPageInfo();
+	savePageInfo(pageInfo);
+	console.log("getSavedPosition(pageInfo) = ", getSavedPosition(pageInfo));
+	sendPagePosition();
 	//Go to last page mark
 	//If there is a mark saved, go to it
 	//Otherwise, store the mark. This method should be 
