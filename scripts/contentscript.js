@@ -1,15 +1,7 @@
 // contentscript.js can access contents of current page
+var storage = chrome.storage.local;
 
 $(document).ready(function(){
-
-	//test  and example code
-	// console.log("contentscript loaded");
-	// //console.log(window.pageYOffset);
-	// window.send = function(){
-	// chrome.extension.sendMessage({greeting: "hello"}, function(response) {
-	//   console.log(response.farewell);
-	// });
-	// }
 
 	chrome.extension.onMessage.addListener(
 	  function(request, sender, sendResponse) {
@@ -17,11 +9,6 @@ $(document).ready(function(){
 	                "from a content script:" + sender.tab.url :
 	                "from the extension");
 	    //handle message types. Message requires a type value
-
-	    // example code
-	    // if (request.greeting == "hello")
-	    //   sendResponse({farewell: "goodbye"});
-
 	  	if(request.type==="getInfo"){
 	  		//get the current scroll positions
 	  		sendResponse({type: "pagePosition", 

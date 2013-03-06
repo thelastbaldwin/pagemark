@@ -8,11 +8,11 @@
 	},
 	"content_scripts" :[
 		{
-			"matches" : ["http://*/*"],
+			"matches" : ["<all_urls>"],
 			"js" : ["scripts/jquery.1.9.1.min.js","scripts/contentscript.js"]
 		}
 	],
-	"permissions" : ["storage", "tabs", "http://*/*"],
+	"permissions" : ["storage", "tabs", "<all_urls>"],
 	"manifest_version": 2,
 	"offline_enabled": true
 } 
