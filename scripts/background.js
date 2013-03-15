@@ -1,12 +1,9 @@
 //this extension just needs to listen to the icon click
-//event and tell the content script to send the popup
-//some info about the page
+//event and store/update the position accordingly
 var storage = chrome.storage.local;
 
 chrome.browserAction.setIcon({path: "icon.png"},function(){
 });
-
-console.log("background.js loaded");
 
 var pageInfo = {
 	yPosition: 0,
@@ -14,6 +11,7 @@ var pageInfo = {
 	url: ''
 }
 
+var SCROLLTHRESHOLD = 5;
 var savedPosition;
 
 chrome.extension.onMessage.addListener(
@@ -28,19 +26,14 @@ chrome.extension.onMessage.addListener(
 		pageInfo.yPosition = request.pageYOffset;
 		pageInfo.url = request.url;
 	}
-	else if(request.type="fetchPosition"){
-		getPageInfo();
-	}
 });
 
 function getPageInfo(){
 	chrome.tabs.getSelected(null, function(tab) {
 		console.log(tab);
 	  chrome.tabs.sendMessage(tab.id, {type: "getInfo"}, function(response) {
-	  	console.log("getPageInfo response = ", response);
 	    pageInfo.yPosition = response.pageYOffset;
 	    pageInfo.url = response.url;
-
 	    savedPosition = getSavedPosition();
 	  });
 	});
@@ -55,22 +48,17 @@ function sendPagePosition(position){
 function getSavedPosition(){
 	var pos;
 	storage.get(pageInfo.url, function(item){
-		console.log("local storage values : ", item);
 		pos = item[pageInfo.url];
 
 		//if the saved value is greater than the current
 		//position, go to the further position
-		if(item[pageInfo.url] > pageInfo.yPosition){
+		if(item[pageInfo.url] - pageInfo.yPosition > SCROLLTHRESHOLD){
 	    	sendPagePosition(item[pageInfo.url]);
 	    //if they are equal, reset the value
-	    }else if(item[pageInfo.url] === pageInfo.yPosition){
+	    }else if(Math.abs(item[pageInfo.url] - pageInfo.yPosition) <= SCROLLTHRESHOLD) {
 	    	var reset = confirm("Clear the stored position?");
 	    	if(reset){
-		    	var url = pageInfo.url;
-		    	console.log(url);
-		    	storage.set({url : 0}, function(item){
-		    		console.log("new url value is ", item);
-		    	}); //back to the top
+		    	storage.remove(pageInfo.url); //remove the key
 		    }
 	    //otherwise just save the value in memory
 	    }else{
