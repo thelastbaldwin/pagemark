@@ -1,15 +1,14 @@
 {	"name": "PageMark",
 	"version": "1.0",   
 	"description": "Tracks the last viewed location on a page",
+	"background": { "scripts": ["scripts/background.js"] },
 	"browser_action": {     
-		"default_icon": "icon.png",
-		"default_title": "PageMark",
-		"default_popup": "popup.html"
+		"name" : "Click to mark the last read location"
 	},
 	"content_scripts" :[
 		{
 			"matches" : ["<all_urls>"],
-			"js" : ["scripts/jquery.1.9.1.min.js","scripts/contentscript.js"]
+			"js" : ["scripts/jquery.1.9.1.min.js", "scripts/contentscript.js"]
 		}
 	],
 	"permissions" : ["storage", "tabs", "<all_urls>"],

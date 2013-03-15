@@ -1,7 +1,7 @@
 body{
 	background-color: #eee;
 	height: auto;
-	font: 12px/14px Helvetica;
+	font: 14px/20px Verdana;
 }
 
 ul{
@@ -13,5 +13,5 @@ ul{
 }
 
 li:hover{
-	background-color: red;
+	background-color: #AADBE3;
 }

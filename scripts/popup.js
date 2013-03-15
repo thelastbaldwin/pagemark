@@ -20,6 +20,9 @@ chrome.extension.onMessage.addListener(
 		pageInfo.yPosition = request.pageYOffset;
 		pageInfo.url = request.url;
 	}
+	else if(request.type="fetchPosition"){
+		getPageInfo();
+	}
 });
 
 function getPageInfo(){
@@ -27,9 +30,6 @@ function getPageInfo(){
 	  chrome.tabs.sendMessage(tab.id, {type: "getInfo"}, function(response) {
 	    pageInfo.yPosition = response.pageYOffset;
 	    pageInfo.url = response.url;
-	    savePageInfo(); //test
-
-	    //if the page's scroll position is longer than the one stored, store it
 	  });
 	});
 }
@@ -61,16 +61,14 @@ function savePageInfo(){
 	});
 }
 
-var goto = document.getElementById("goto");
-goto.onclick = function(){
-	//send a message to contentscript.js to get some 
-	//page info. chrome.tabs.getSelected puts us in the current tab
-	
-	getPageInfo();
+$("#goto").on('click', function(){
 	sendPagePosition();
-	//Go to last page mark
-	//If there is a mark saved, go to it
-	//Otherwise, store the mark. This method should be 
-	//replaced with the button click and the popup removed.
-
-}
+	console.log("goto");
+});
+$("#store").on('click', function(){
+	savePageInfo();
+	console.log("store");
+});
+$("#store").on('clear', function(){
+	console.log("clear");
+});
